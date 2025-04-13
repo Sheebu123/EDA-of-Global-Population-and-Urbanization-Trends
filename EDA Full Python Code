@@ -1,0 +1,135 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load and clean data
+df = pd.read_excel("Python_ORG_DataFinal.xlsx", sheet_name="Data", skiprows=3)
+df = df.dropna(axis=1, how="all")
+
+# Filter for Total Population
+df_total_pop = df[df["Indicator Name"] == "Population, total"]
+df_total_pop.set_index("Country Name", inplace=True)
+
+# Getting year columns
+year_cols = df.columns[4:]
+
+# Compute global average population per year
+global_avg_pop = df_total_pop[year_cols].mean()
+
+# Basic EDA Print
+print("First 5 Rows")
+print(df.head(5))
+print("Last 5 Rows")
+print(df.tail(5))
+print("Summary")
+print(df.describe())
+print(df.info())
+
+# Objective 1: Global Total Population Trend
+# Plot
+sns.set(style="whitegrid")
+plt.figure(figsize=(12,6))
+plt.plot(year_cols, global_avg_pop)
+plt.title("Global Average Total Population Over Time")
+plt.xlabel("Year")
+plt.ylabel("Population")
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+# Filter for Urban population percentage
+df_urban_pct = df[df["Indicator Name"] == "Urban population (% of total population)"]
+df_urban_pct.set_index("Country Name", inplace=True)
+
+# Compute global average % of urban population per year
+global_urban_pct = df_urban_pct[year_cols].mean()
+
+# Objective 2: Urbanization Rate Over Time
+# Plot
+sns.set(style="whitegrid")
+plt.figure(figsize=(12,6))
+plt.plot(year_cols, global_urban_pct, color='green')
+plt.title("Global Average Urban Population (% of Total Population)")
+plt.xlabel("Year")
+plt.ylabel("Urban Population (%)")
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+# Choosing a year
+year = "2020"
+
+# Get total population and urban population for that year
+df_total_pop = df[df["Indicator Name"] == "Population, total"]
+df_urban_pop = df[df["Indicator Name"] == "Urban population"]
+
+# Merge by country
+df_merge = df_total_pop[["Country Name", year]].merge(
+    df_urban_pop[["Country Name", year]],
+    on="Country Name"
+)
+
+# Remove missing values
+df_merge = df_merge.dropna()
+
+# Sort by total population and take top 10
+df_merge = df_merge.sort_values(by=year + "_x", ascending=False).head(10)
+
+# Renaming columns to make them easier to read
+df_merge.columns = ["Country Name", "Total Population", "Urban Population"]
+
+# Objective 3: Urban vs. Total Population Comparison for Selected Year
+# Plot total population
+plt.figure(figsize=(12, 6))
+plt.bar(df_merge["Country Name"], df_merge["Total Population"], label="Total")
+plt.bar(df_merge["Country Name"], df_merge["Urban Population"], label="Urban")
+plt.title("Urban vs Total Population in 2020 (Top 10 Countries)")
+plt.xlabel("Country")
+plt.ylabel("Population")
+plt.legend()
+plt.xticks(rotation=45)
+plt.show()
+
+# Filter data for Population Growth Rate (%)
+df_growth = df[df["Indicator Name"] == "Population growth (annual %)"]
+
+# Drop missing values for the selected year
+growth_values = df_growth[[year]].dropna()
+
+# Objective 4: Population Growth Rate Distribution Across Countries
+# Plot distribution 
+plt.figure(figsize=(10,6))
+sns.histplot(growth_values[year], bins=30, kde=True, color="steelblue")
+plt.title(f"Distribution of Population Growth Rates in {year}")
+plt.xlabel("Population Growth Rate (%)")
+plt.ylabel("Number of Countries")
+plt.tight_layout()
+plt.show()
+
+# Filter for urban population growth data
+df_urban_growth = df[df["Indicator Name"] == "Urban population growth (annual %)"]
+
+# List of countries to compare
+selected_countries = ["India", "China", "Brazil", "United States", "Nigeria"]
+
+# Filter dataset for those countries
+df_selected = df_urban_growth[df_urban_growth["Country Name"].isin(selected_countries)]
+
+# Set index for plotting
+df_selected = df_selected.set_index("Country Name")
+
+# Objective 5: Compare Urban Population Growth Across Selected Countries
+# Plot each country’s urban growth over the years
+plt.figure(figsize=(14,6))
+
+for country in selected_countries:
+    plt.plot(year_cols, df_selected.loc[country, year_cols], label=country)
+
+plt.title("Urban Population Growth Rate Over Time")
+plt.xlabel("Year")
+plt.ylabel("Growth Rate (%)")
+plt.legend()
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()

@@ -133,3 +133,33 @@ plt.legend()
 plt.xticks(rotation=45)
 plt.tight_layout()
 plt.show()
+# Additional Objective : Correlation Heatmap of Population Indicators (Selected Year)
+
+
+indicators_of_interest = [
+    "Population, total",
+    "Urban population",
+    "Population growth (annual %)",
+    "Urban population growth (annual %)",
+    "Urban population (% of total population)"
+]
+
+# Filter data
+df_filtered = df[df["Indicator Name"].isin(indicators_of_interest)]
+
+# indicators as columns and countries as rows
+df_pivot = df_filtered.pivot(index="Country Name", columns="Indicator Name", values=year)
+
+# Drop rows with missing data
+df_pivot = df_pivot.dropna()
+
+# Compute correlation matrix
+corr_matrix = df_pivot.corr()
+
+# Plot heatmap
+plt.figure(figsize=(10, 8))
+sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', fmt=".2f", linewidths=0.5)
+plt.title(f"Correlation Heatmap of Population Indicators ({year})")
+plt.tight_layout()
+plt.show()
+

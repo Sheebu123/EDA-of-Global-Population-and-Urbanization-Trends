@@ -1,0 +1,26 @@
+My Python Objectives
+
+Objective 1: Global Total Population Trend
+Task: Plot the global average total population over time (for the years available in the dataset).
+
+Plot Type: Line plot showing global average total population.
+
+Objective 2: Urbanization Rate Over Time
+Task: Plot the global average urban population percentage over time.
+
+Plot Type: Line plot showing the global average urban population percentage.
+
+Objective 3: Urban vs. Total Population Comparison for Selected Year (2020)
+Task: Compare the urban population and total population for the top 10 countries in 2020.
+
+Plot Type: Bar plot comparing urban and total populations for the top 10 countries.
+
+Objective 4: Population Growth Rate Distribution Across Countries
+Task: Plot the distribution of population growth rates for all countries in 2020.
+
+Plot Type: Histogram with a KDE (Kernel Density Estimate) overlay showing the distribution of population growth rates.
+
+Objective 5: Compare Urban Population Growth Across Selected Countries
+Task: Compare the urban population growth rate over time for a list of selected countries (India, China, Brazil, United States, Nigeria).
+
+Plot Type: Line plot comparing the urban population growth rate over the years for each of the selected countries

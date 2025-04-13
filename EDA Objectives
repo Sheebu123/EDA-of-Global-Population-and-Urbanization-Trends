@@ -24,3 +24,5 @@ Objective 5: Compare Urban Population Growth Across Selected Countries
 Task: Compare the urban population growth rate over time for a list of selected countries (India, China, Brazil, United States, Nigeria).
 
 Plot Type: Line plot comparing the urban population growth rate over the years for each of the selected countries
+
+Additional Objective : Correlation Heatmap of Population Indicators (Selected Year)
